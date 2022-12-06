@@ -1,5 +1,6 @@
 import React, { useState,useReducer } from "react";
 import "./../styles/App.css";
+import Card from "./Card";
 
 
 const states = [{
@@ -141,9 +142,63 @@ const states = [{
 function App() 
 {
 	// Do not alter/remove main div
+	//local state.
+	const [state, setState]=useState(0);
+	const [city, setCity]=useState(0);
+	const [town, setTown]=useState(0);
+
+	const handleStateChang= (event) => {
+		//console.log(event.target.value);
+		setState(event.target.value);
+		setCity(0);
+		setTown(0);
+	}
+	const handleCityChang= (event) => {
+		setCity(event.target.value);
+		setTown(0);
+	}
+	const handleTownChang= (event) => {
+		setTown(event.target.value);
+	}
 	return (
 	<div id="main">
-		
+		<div className="main-section">
+			<div className="dropdown-section">
+			<section id="state" className="dropdown-section state-section">
+			<label>State: </label>
+
+			<select value={state} onChange={handleStateChang}>
+			{
+				states.map((state,index) => <option key={`state-${index}`} value={index}>{state.name}</option>)
+			}
+			</select>
+		</section>
+
+		<section id="city" className="dropdown-section state-section">
+			<label>Cities: </label>
+			
+			<select value={city} onChange={handleCityChang}>
+			{
+				states[state].city.map((currentCity, index) => <option key={`city-${index}`} value={index}>{currentCity.name}</option>)
+			}
+			</select>
+		</section>
+		<section id="landmark" className="dropdown-section state-section">
+			<label>Towns: </label>
+			<select value={town} onChange={handleTownChang}>
+			{
+			states[state].city[city].landmarks.map((landmark,index) => <option key={`town-${index}`} value={index}>{landmark.name}</option>)
+			}
+			</select>
+		</section>
+			</div>
+			<div className="card-section">
+			<Card title="state" name={states[state].name}description={states[state].description}></Card>
+			<Card title= "city" name={states[state].city[city].name}description={states[state].city[city].description}></Card>
+			<Card title= "landmark" name={states[state].city[city].landmarks[town].name}description={states[state].city[city].landmarks[town].description}></Card>
+		</div>
+		</div>
+
 	</div>
 	);
 }
